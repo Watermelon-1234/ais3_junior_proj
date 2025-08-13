@@ -1,8 +1,0 @@
-services:
-  php-iconv:
-    build: .
-    ports:
-      - "8080:80"
-    volumes:
-      - ./web:/var/www/html
-      - ./logs:/var/log/apache2
