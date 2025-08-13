@@ -1,10 +1,9 @@
-FROM php:8.3.0-cli
+FROM php:8.3-apache
 
-WORKDIR /app
+WORKDIR /var/www/html
 
-COPY web/ /app/
+COPY web/ /var/www/html/
 
 RUN php -v && ldd --version
 
-EXPOSE 8080
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "/app"]
+EXPOSE 80
